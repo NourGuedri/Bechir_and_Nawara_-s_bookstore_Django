@@ -1,0 +1,79 @@
+{% load static %} {% load i18n %} {% block css %}
+<link
+  href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
+  rel="stylesheet"
+  type="text/css"
+/>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+  .page-body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    padding-top: 60px;
+  }
+  .form-container {
+    width: 30%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .title-container {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+</style>
+{% endblock %} {% block content %}
+
+<div class="page-body">
+  <div class="title-container">
+    <h1>LOGIN</h1>
+  </div>
+
+  <div class="form-container">
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="input input-bordered flex items-center gap-2">
+          📞
+          <input type="text" class="grow" name="username" placeholder="Phone Number" />
+        </label>
+      </div>
+      <div class="form-group">
+        <label class="input input-bordered flex items-center gap-2">
+          🔑
+          <input type="password" name="password" class="grow" placeholder="Password" />
+        </label>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+
+            <div role="alert" class="alert alert-{{message.tags}} mt-4">
+              {% if message.tags == 'error' %}
+              <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {% endif %}
+              <span>{{message}}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary mt-4">🤍Login</button>
+      </div>
+      <div class="form-group">
+        <a href="{% url 'password_change_step1' %}">Forgot password?</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

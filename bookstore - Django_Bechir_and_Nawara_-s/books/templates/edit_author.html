@@ -1,0 +1,50 @@
+{% include "components/navbar.html" %} {% block content %}
+
+
+
+<style>
+    .page-body {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      padding-top: 60px;
+    }
+    .form-container {
+      width: 30%;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding-top: 30px;
+    }
+  
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    .title-container {
+      margin-bottom: 2rem;
+      font-size: 2rem;
+    }
+  </style>
+<div class="page-body">
+  <div class="title-container">
+    <h1>Editing Author</h1>
+  </div>
+
+  <div class="form-container">
+    <form method="post" action="">
+      {% csrf_token %}
+      <label class="label">Name</label>
+      <input
+        type="text"
+        name="name"
+        class="input input-bordered"
+        value="{{ author.name }}"
+        required
+      />
+      <button class="btn" type="submit">Update Author</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

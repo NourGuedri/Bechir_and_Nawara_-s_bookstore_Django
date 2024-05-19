@@ -1,0 +1,55 @@
+{% include "components/navbar.html" %} {% block content %}
+<style>
+  .page-body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    padding-top: 60px;
+  }
+  .form-container {
+    width: 30%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .title-container {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+</style>
+<!-- book creation -->
+<div class="page-body">
+  <div class="title-container">
+    <h1>Create a New Author</h1>
+  </div>
+
+  <div class="form-container">
+    <form method="post" action="">
+      {% csrf_token %}
+      <div class="form-group">
+        <label class="input input-bordered flex items-center gap-2">
+          <input
+            name="name"
+            type="text"
+            class="grow"
+            placeholder="Author Name"
+          />
+        </label>
+      </div>
+
+      <div class="form-group">
+        <button class="btn" type="submit">Submit Author</button>
+      </div>
+    </form>
+</div>
+</div>
+    {% endblock %}
+
+

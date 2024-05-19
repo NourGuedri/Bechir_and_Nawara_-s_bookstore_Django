@@ -1,0 +1,143 @@
+
+{% include "components/navbar.html" %}
+
+
+{% comment %} styling  {% endcomment %}
+
+
+
+{% block content %}
+
+<style>
+    .date-filter-container {
+        {% comment %} background red {% endcomment %}
+        display:flex;
+        justify-content: space-around;
+        align-items: CENTER;
+
+        padding: 1rem;
+
+
+    }
+
+    .date-filter-container form{
+        display: flex;
+        align-items: left;
+        flex-direction:column;
+        justify-content: center;
+        gap:10px;
+
+    }
+</style>
+<!-- book list -->
+ 
+    <div class="divider divider-primary">
+        Borrowings
+        
+    </div>
+
+<div class="overflow-x-auto">
+    <div class='date-filter-container'>
+
+    <form method="get">
+        <div class="form-group">
+            <label for="date_borrowed">Filter by Date Borrowed</label>
+            <input type="date" name="date_borrowed" id="date_borrowed" class="form-control" value="{{ date_borrowed }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </form>
+        OR
+    <form method="get">
+        <div class="form-group">
+            <label for="search">Search by Name</label>
+            <input type="text" name="search" id="search" class="form-control" value="{{ search }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    {% comment %} Filter by period of date borrowed, 2 date inputs  {% endcomment %}
+    OR
+    <form method="get">
+        <div class="form-group">
+            <label for="date_borrowed_start">Date Borrowed Period</label>
+            <input type="date" name="date_borrowed_start" id="date_borrowed_start" class="form-control" value="{{ date_borrowed_start }}">
+        </div>
+        ⏬
+        <div class="form-group">
+            <input type="date" name="date_borrowed_end" id="date_borrowed_end" class="form-control" value="{{ date_borrowed_end }}">
+        </div>
+        <button type="submit" class="btn btn-primary">Filter</button>
+
+    </form>
+
+    OR
+    {% comment %} CLEAR FILTERS, A BUTTON THAT REDIRECTS  {% endcomment %}
+    <form method="get">
+        <button type="submit" class="btn btn-primary">Clear Filters</button>
+    </form>
+
+    
+</div>
+
+    
+
+
+
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th></th>
+          <th>Book Name</th>
+          <th>Author(s)</th>
+          <th>Borrower</th>
+          <th>Date Borrowed</th>
+            <th>Return Date</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for borrow in borrowings %}
+        <tr>
+            <td>{{ borrow.id }}</td>
+            <td>{{ borrow.book.title }}</td>
+            <td>
+                {% for author in borrow.book.authors.all %}
+                    {{ author.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ borrow.borrower.first_name }} {{borrow.borrower.last_name}}</td>
+
+            <td>
+                {{borrow.date_borrowed}}
+            </td>
+            <td>
+                {{borrow.return_date}}
+            </td>
+            {% comment %} delete book btn {% endcomment %}
+            <td>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="borrow_id" value="{{ borrow.id }}">
+                    <button type="submit" class="btn btn-outline btn-primary">✔️ Mark As Returned</button>
+
+                
+            </td>
+
+          
+        </tr>
+
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>
+    </ul>
+
+
+
+
+
+{% endblock %}
+
+
+

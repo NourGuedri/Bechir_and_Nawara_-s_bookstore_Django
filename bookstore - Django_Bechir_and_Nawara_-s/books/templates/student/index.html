@@ -1,0 +1,95 @@
+
+{% include "components/navbar.html" %}
+
+
+{% block content %}
+<!-- book list -->
+ 
+    <div class="divider divider-primary">Books List</div>
+
+<div class="overflow-x-auto">
+    {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+    <div class="toast toast-end">
+        <div class="alert alert-{{ message.tags }}">
+          <span>{{message}}</span>
+        </div>
+      </div>
+    {% endfor %}
+  </ul>
+{% endif %}
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Author</th>
+          <th>Available?</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in all_books %}
+        <tr>
+            <td>{{ book.id }}</td>
+            <td>{{ book.title }}</td>
+            <td>
+                {% for author in book.authors.all %}
+                    {{ author.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+
+            <td>
+                {% if book.available %}
+                <div class="badge badge-accent badge-outline">YES</div>
+                {% else %}
+                <div class="badge badge-secondary badge-outline">NO</div>
+                {% endif %}
+            </td>
+            <td>
+                <div class="form-group" >
+                    <button class="btn" {% if not book.available %}disabled{% endif %} onclick="my_modal_{{ book.id }}.showModal()" >Borrow book</button>
+                  </div>
+                </td>
+            
+
+        
+        </tr>
+        <dialog id="my_modal_{{ book.id }}" class="modal">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg">✨ You're One Step Away!</h3>
+              <p class="py-4">
+                {% comment %} youre ABT TO borrow a book and the return date is 15 days from now, and show it {% endcomment %}
+                You're about to borrow <span class="font-bold">"{{ book.title }}"</span> by <span class="font-bold">{{ book.authors.all.0.name }}</span> and the return date is <span class="font-bold">{{ return_date }}</span><br><br>
+                Are you sure you want to proceed? This action cannot be undone.
+              </p>
+              <div class="modal-action">
+                <form method="dialog">
+                  <!-- if there is a button in form, it will close the modal -->
+                  <button class="btn btn-error">Cancel</button>
+                </form>
+                <form method='post' action="{% url 'student_borrow' book.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline btn-success">Confirm</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+        
+
+        {% endfor %}
+    </tbody>
+    </table>
+    
+    </div>
+    </ul>
+
+
+
+
+
+{% endblock %}
+
+
+

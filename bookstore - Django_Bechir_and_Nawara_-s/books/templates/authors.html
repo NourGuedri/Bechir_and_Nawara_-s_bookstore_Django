@@ -1,0 +1,63 @@
+{% include "components/navbar.html" %}
+
+{% block content %}
+<!-- author list -->
+
+<div class="divider divider-primary">Authors List</div>
+
+<div class="overflow-x-auto">
+    <table class="table">
+      <!-- head -->
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for author in authors %}
+        <tr>
+            <td>{{ author.id }}</td>
+            <td>{{ author.name }}</td>
+            {% comment %} delete author btn {% endcomment %}
+            <td>
+                <button onclick="my_modal_{{author.id}}.showModal()"  class="btn btn-error btn-outline btn-accent">Delete</button>
+
+            </td>
+            <td>
+                <form method="post" action="{% url 'admin_edit_author' author.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-outline btn-primary">Edit</button>
+                </form>
+            </td>
+            <dialog id="my_modal_{{author.id}}" class="modal">
+            <div class="modal-box">
+                <h3 class="font-bold text-lg">
+                 🚨 Are you sure you want to delete this Author? 
+                </h3>
+                <p class="py-4">
+                    
+                    ❌ Deleting {{author.name}}, All books written by him will be deleted too! 
+                    <BR>
+                    <br>
+                    This action cannot be undone.
+                </p>
+                <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+                <form method="post" action="{% url 'admin_delete_author' author.id %}">
+                    {% csrf_token %}
+                    <button class="btn btn-error">Delete</button>
+                </form>
+                </div>
+            </div>
+            </dialog>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,107 @@
+{% load static %} {% load i18n %} {% block css %}
+<link
+  href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
+  rel="stylesheet"
+  type="text/css"
+/>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+    .navbar * {
+      z-index: 9999 !important;
+    }
+    .emoji{
+      font-size: 1.2rem;
+    }
+    li{
+      transition:0.3s ease;
+      margin:0 15px;
+    }
+    li:hover{
+      transform:scale(1.1);
+    }
+
+
+  </style>
+{% endblock %} {% block navbar %}
+
+<div  class="navbar bg-base-100" >
+  <div class="flex-1">
+    <a class="btn btn-ghost text-xl">📕 Bechir & Nawara's</a>
+  </div>
+{% comment %} ADMIN Nav Elements {% endcomment %}
+
+{% if request.user.is_staff %}
+
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <li>
+        <li><a href="{% url 'admin_borrowings' %}"><span class="emoji">🤝 </span> Borrowings</a></li>
+      <li>
+        <details>
+          
+          <summary><span class="emoji">✍️ </span> Authors</summary>
+          <ul class="p-2 bg-base-100 rounded-t-none">
+            <li><a href="{% url 'admin_new_author' %}"><span class="emoji">➕ </span> Add author</a></li>
+            <li><a href="{% url 'admin_authors' %}"><span class="emoji">📃 </span> List Authors</a></li>
+          </ul>
+        </details>
+      </li>
+      <li>
+        <details>
+          <summary><span class="emoji">📚 </span> Books</summary>
+          <ul class="p-2 bg-base-100 rounded-t-none">
+            <li><a href="{% url 'admin_new_book' %}"><span class="emoji">➕ </span> Add book</a></li>
+            <li><a href="{% url 'admin_index' %}"><span class="emoji">📃 </span> List Books</a></li>
+          </ul>
+        </details>
+      </li>
+      <li>
+
+        <p  ><span class="emoji">👩‍💻 </span>{{request.user.first_name}} </p>
+      </li>
+      <li>
+        <p onclick="logoutmodal.showModal()"><span class="emoji">📤</span>Logout</p>
+      </li>
+      
+    </ul>
+  </div>
+{% endif %} 
+{% if not request.user.is_staff %}
+
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      <li><a href="{% url 'student_index' %}"><span class="emoji">📚 </span> List Books</a></li>
+      <li>
+
+        <p><span class="emoji">🧑‍🎓 </span>{{request.user.first_name}} {{request.user.last_name}}</p>
+      </li>
+      <li><a onclick="logoutmodal.showModal()"><span class="emoji">📤</span>Logout</a></li>
+    </ul>
+  </div>
+{% endif %}
+
+<!-- Open the modal using ID.showModal() method -->
+<dialog id="logoutmodal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">🚨 Your Are Logging out</h3>
+    <p class="py-4">
+      {{request.user.first_name}} {{request.user.last_name}}, You Are Logging Out Of Your Account, Proceed ?
+    </p>
+    <div class="modal-action">
+      <form method="dialog">
+        <!-- if there is a button in form, it will close the modal -->
+        <button class="btn btn-error">No</button>
+      </form>
+      <a  href="{% url 'logout' %}" class="btn btn-outline btn-success">
+        Yes
+      </a>
+
+    </div>
+  </div>
+</dialog>
+
+</div>
+
+{% endblock %}

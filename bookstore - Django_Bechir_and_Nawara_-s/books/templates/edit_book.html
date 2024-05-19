@@ -1,0 +1,74 @@
+{% include "components/navbar.html" %} {% block content %}
+<style>
+  .page-body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    padding-top: 60px;
+  }
+  .form-container {
+    width: 30%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding-top: 30px;
+  }
+  .form-container label{
+    margin-bottom:10px;
+  }
+  .form-container button{
+    margin-top:20px;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .title-container {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+</style>
+<div class="page-body">
+  <div class="title-container">
+    <h1>Editing Book</h1>
+  </div>
+
+  <div class="form-container">
+    <form method="post" action="">
+      {% csrf_token %}
+      <label class="label">Title</label>
+      <input
+        type="text"
+        name="title"
+        class="input input-bordered"
+        value="{{ book.title }}"
+      />
+      <label class="label">Authors</label>
+      <select
+        name="authors"
+        class="select select-bordered w-full max-w-xs"
+        multiple
+      >
+        {% for author in authors %}
+        <option
+          value="{{ author.id }}"
+          {%
+          if
+          author
+          in
+          book.authors.all
+          %}selected{%
+          endif
+          %}
+        >
+          {{ author.name }}
+        </option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-outline btn-primary" type="submit">Update Book</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
